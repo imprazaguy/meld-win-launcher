@@ -4,6 +4,9 @@
 #include <windows.h>
 #include <process.h>
 #include <shellapi.h>
+#include <shlwapi.h>
+
+static wchar_t meld_bin[MAX_PATH + 10];
 
 static wchar_t **get_argv()
 {
@@ -16,9 +19,15 @@ static wchar_t **get_argv()
         exit(1);
     }
 
+    if (GetModuleFileNameW(NULL, meld_bin, MAX_PATH) == 0) {
+        exit(1);
+    }
+    PathRemoveFileSpecW(meld_bin);
+    wcscat(meld_bin, L"\\bin\\meld");
+
     wchar_t **argv = (wchar_t **) malloc(sizeof (*argv) * (argc + 2));
     argv[0] = argv_[0];
-    argv[1] = L"bin\\meld";
+    argv[1] = meld_bin;
     for(i = 1; i < argc; ++i) {
         argv[i + 1] = argv_[i];
     }
