@@ -76,6 +76,6 @@ int main(int _argc, char *_argv[])
     argv = (const wchar_t * const *) get_argv();
     _putenv("LANG=en_US");
     envp = (const wchar_t * const *) get_envp();
-    _wexecvpe(PYTHON_EXE, argv, envp);
+    _wspawnvpe(_P_WAIT, PYTHON_EXE, argv, envp);
     return 0;
 }
